@@ -36,6 +36,38 @@ public class Main {
             exchange.getResponseBody().close();
         });
 
+        //Quando é adcionado um novo no receber notificação apenas ao no da mesma area
+        //Quando um no é removido receber notificação na mesma area
+
+//        1-Adcionar um produto
+//        Propiedades
+//        Nome
+//        Preço Inicial
+//        //Adcionar na bd mas nao na adicao do produto
+//        Preço Final
+//
+//        2-Criar Um Leilao
+//        Tempo
+//        Lista de produtos
+//        //NA BD
+//        Lances-leilao, produto, preço
+//
+//
+//        3-Leilao
+//        3.1-Ver Todos os leiloes
+//                Selecionar Leilao
+//                        Apanha o valor final atual e na medida qu ese da lances aumenta o valor final
+//                        Selecioanr produto e dar lance e associava ao ip e porta
+//        3.2-Ver Todos os leiloes que ele participa
+//                Selecionar Leilao
+//                Apanha o valor final atual e na medida qu ese da lances aumenta o valor final
+//                Selecioanr produto e dar lance e associava ao ip e porta
+//
+//        Enviar uma notificação para todos os participantes quando um leilao terminar e o preço final para todos os produtos
+//        E para quem ganhou em cada produto mostrar um parabens por ter vencido
+
+
+
         server.start();
         System.out.println("Server running on " + reservedIp + ":" + port);
         //Add new Node to kademlia
@@ -119,6 +151,8 @@ public class Main {
         }
     }
 }
+
+//Adcionar mais um
 
 /*
 Windows command prompt to create fake ip address
