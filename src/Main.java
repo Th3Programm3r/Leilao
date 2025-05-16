@@ -1,13 +1,11 @@
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.net.URI;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,7 +21,8 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String url = "jdbc:mysql://localhost:3306/ssd";
         String username = "root";
-        String password = "qwerty";
+//        String password = "qwerty";
+        String password = "QwertY1234!";
 
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             System.out.println("Connection successful!");
@@ -43,6 +42,7 @@ public class Main {
 
             // Start server
             HttpServer server = HttpServer.create(new InetSocketAddress(ip, port), 0);
+
             server.createContext("/", exchange -> {
                 String response = "Hello from " + reservedIp + ":" + port;
                 exchange.sendResponseHeaders(200, response.length());
@@ -50,8 +50,51 @@ public class Main {
                 exchange.getResponseBody().close();
             });
 
-            //Quando é adcionado um novo no receber notificação apenas ao no da mesma area
-            //Quando um no é removido receber notificação na mesma area
+            server.createContext("/newNode", exchange -> {
+                String query = exchange.getRequestURI().getQuery();
+                String message = null;
+                if (query != null) {
+                    for (String param : query.split("&")) {
+                        String[] pair = param.split("=");
+                        if (pair.length == 2 && pair[0].equals("node")) {
+                            message = URLDecoder.decode(pair[1], StandardCharsets.UTF_8);
+                            break;
+                        }
+                    }
+                }
+                System.out.println("New node received " + message + " on your area");
+
+                String response = "Received";
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            });
+
+            server.createContext("/removedNode", exchange -> {
+                String query = exchange.getRequestURI().getQuery();
+                String message = null;
+                if (query != null) {
+                    for (String param : query.split("&")) {
+                        String[] pair = param.split("=");
+                        if (pair.length == 2 && pair[0].equals("node")) {
+                            message = URLDecoder.decode(pair[1], StandardCharsets.UTF_8);
+                            break;
+                        }
+                    }
+                }
+                System.out.println("Node " + message + " was removed from your area");
+
+                String response = "Received";
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            });
+
+
+            //Quando é adcionado um novo no receber notificação apenas ao no da mesma area ***********
+            //Quando um no é removido receber notificação na mesma area ***********
 
     //        1-Adcionar um produto
     //        Propiedades
